@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>New Item</h1>
+
+<form method="POST">
+    <fieldset>
+        <legend>Please enter your information:</legend>
+
+
+
+        <!-- TODO: Remove the next paragraph and use the `form` object passed in 
+            from the route to render a form. -->
+            {{ form.csrf_token }}
+            {{ form.name.label }}
+            <br>
+            {{ form.name(size=25) }}
+            <hr>
+            {{ form.price.label }}
+            <br>
+            {{ form.price(size=18) }}
+            <hr>
+            {{ form.category.label }}
+            <br>
+            {{ form.category }}
+            <hr>
+            {{ form.photo_url.label }}
+            <br>
+            {{ form.photo_url(size=18) }}
+            <hr>
+            {{ form.store.label }}
+            <br>
+            {{ form.store }}
+            <hr>
+        <input type="submit" value="Submit">
+    </fieldset>
+</form>
+
+
+{% endblock %}
