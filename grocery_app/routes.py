@@ -115,24 +115,6 @@ def shopping_list():
     shopping_list = current_user.shopping_list_users
     return render_template("shopping_list.html", shopping_list=shopping_list)
 
-@main.route('/delete_to_shopping_list/<item_id>', methods=['POST'])
-@login_required
-def delete_to_shopping_list(item_id):
-    db.session.query(shopping_list_table).filter_by(item_id=item_id).delete()
-    # item = GroceryItem.query.get(item_id)
-    # current_user.shopping_list_users.pop(item)
-    # db.session.add(current_user)
-    db.session.commit()
-    flash("Deleted item from cart")
-    return redirect(url_for('main.shopping_list')) 
-
-#STUDENTS DELETE
-@main.route('/students/<student_id>/delete', methods=['POST'])
-def students_delete(student_id):
-    Student.query.filter_by(id=student_id).delete()
-    db.session.commit()
-    return redirect(url_for('main.home'))
-
 # AUTH
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
