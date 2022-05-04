@@ -17,6 +17,9 @@
             <hr>
             <nav>
                 <a href="/">Home</a>
+                {% if current_user.is_authenticated %}
+                <a href="/shopping_list">Shopping List</a>
+                {% endif %}
                 <div>
                     <a href="/new_store">New Store</a>
                     <a href="/new_item">New Item</a>

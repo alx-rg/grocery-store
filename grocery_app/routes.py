@@ -6,7 +6,7 @@ from unicodedata import category
 from venv import create
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from datetime import date, datetime
-from grocery_app.models import GroceryStore, GroceryItem, User, UserMixin
+from grocery_app.models import GroceryStore, GroceryItem, User, UserMixin, shopping_list_table
 from grocery_app.forms import GroceryStoreForm, GroceryItemForm, SignUpForm, LoginForm
 # Import app and db from events_app package so that we can run app
 from grocery_app.extensions import app, db
@@ -98,6 +98,40 @@ def item_detail(item_id):
         return redirect(url_for('main.item_detail', item_id=item.id))        
 
     return render_template('item_detail.html', item=item, form=form)
+
+@main.route('/add_to_shopping_list/<item_id>', methods=['POST'])
+@login_required
+def add_to_shopping_list(item_id):
+    item = GroceryItem.query.get(item_id)
+    current_user.shopping_list_users.append(item)
+    db.session.add(current_user)
+    db.session.commit()
+    flash("Added item to cart")
+    return redirect(url_for('main.shopping_list', item_id=item.id)) 
+
+@main.route('/shopping_list')
+@login_required
+def shopping_list():
+    shopping_list = current_user.shopping_list_users
+    return render_template("shopping_list.html", shopping_list=shopping_list)
+
+@main.route('/delete_to_shopping_list/<item_id>', methods=['POST'])
+@login_required
+def delete_to_shopping_list(item_id):
+    db.session.query(shopping_list_table).filter_by(item_id=item_id).delete()
+    # item = GroceryItem.query.get(item_id)
+    # current_user.shopping_list_users.pop(item)
+    # db.session.add(current_user)
+    db.session.commit()
+    flash("Deleted item from cart")
+    return redirect(url_for('main.shopping_list')) 
+
+#STUDENTS DELETE
+@main.route('/students/<student_id>/delete', methods=['POST'])
+def students_delete(student_id):
+    Student.query.filter_by(id=student_id).delete()
+    db.session.commit()
+    return redirect(url_for('main.home'))
 
 # AUTH
 @auth.route('/signup', methods=['GET', 'POST'])
